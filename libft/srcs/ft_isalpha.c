@@ -1,27 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_isalpha.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfauconn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/22 18:32:16 by nfauconn          #+#    #+#             */
-/*   Updated: 2022/04/26 14:34:24 by user42           ###   ########.fr       */
+/*   Created: 2019/11/06 15:19:54 by nfauconn          #+#    #+#             */
+/*   Updated: 2021/08/18 12:22:05 by nfauconn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "libft.h"
 
-int	main(int ac, char **argv)
+int	ft_isalpha(int c)
 {
-	errno = 0;
-	if (ac == 5)
-	{
-		open(argv[1], O_WRONLY, O_APPEND);
-		if (errno != 0)
-			printf("%s\n", strerror(errno));
-	}
-	else
-		write(STDERR, "wrong number of arguments\n", 27);
+	if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122))
+		return (1);
 	return (0);
 }

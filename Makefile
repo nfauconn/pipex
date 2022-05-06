@@ -1,11 +1,13 @@
 NAME = pipex
 OBJ_DIR  = ./objs
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror
-INCLUDES = -I includes
+CC = clang
+CFLAGS = -Wall -Wextra -Werror -g
+INCLUDES = -I includes -I libft/includes
+LD_FLAGS = -L libft
 COMP = ${CC} ${CFLAGS}
 RM	 = rm -rf
-SRCS = main.c
+SRCS =	pipex_main.c \
+		tokenizer.c
 OBJS = ${addprefix ${OBJ_DIR}/,${SRCS:.c=.o}}
 
 ${OBJ_DIR}/%.o: %.c
@@ -14,16 +16,19 @@ ${OBJ_DIR}/%.o: %.c
 	@${COMP} ${INCLUDES} -o $@ -c $<
 
 $(NAME): ${OBJS}
-	@${COMP} ${INCLUDES} ${OBJS} -o ${NAME}
+	@make -C libft
+	@${COMP} ${LD_FLAGS} ${OBJS} -o ${NAME} -lft
 	@echo "${NAME} created"
 
 all: ${NAME}
 
 clean:
+	@make clean -C libft
 	@${RM} ${OBJ_DIR}
 	@echo "objs deleted"
 
 fclean: clean
+	@make fclean -C libft
 	@${RM} ${NAME}
 	@echo "program deleted"
 

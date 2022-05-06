@@ -1,33 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_is_whitespace.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/22 18:25:20 by nfauconn          #+#    #+#             */
-/*   Updated: 2022/05/06 13:43:51 by nfauconn         ###   ########.fr       */
+/*   Created: 2022/05/06 13:47:20 by nfauconn          #+#    #+#             */
+/*   Updated: 2022/05/06 13:50:00 by nfauconn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#include "libft.h"
 
-# include <errno.h>
-# include <fcntl.h>
-# include <stdio.h>
-# include <string.h>
-# include <sys/stat.h>
-# include <sys/types.h>
-# include <sys/wait.h>
-# include "libft.h"
-# include "ft_printf.h"
-
-# define STDIN 0
-# define STDOUT 1
-# define STDERR 2
-# define CHILD 0
-
-char	**tokenized_cmd(char *cmd);
-
-#endif
+int	ft_is_whitespace(int c)
+{
+	return (c == 32 || (c >= 9 && c <= 13));
+}
