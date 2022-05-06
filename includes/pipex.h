@@ -6,7 +6,7 @@
 /*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 18:25:20 by nfauconn          #+#    #+#             */
-/*   Updated: 2022/05/06 15:27:02 by nfauconn         ###   ########.fr       */
+/*   Updated: 2022/05/06 17:42:39 by nfauconn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,18 @@
 # define STDERR 2
 # define CHILD 0
 
-typedef struct s_cmd
+typedef struct s_data
 {
-	char	*infile;
+	char	*infile_path;
 	char	**cmd1;
 	char	**cmd2;
-	char	*outfile;
+	char	*outfile_path;
 	char	**env;
-}	t_cmd;
+	int		fd[2];
+}	t_data;
 
-
+void	clean_end(t_data *data);
+void	error_exit(t_data *data, char *s);
 char	**tokenized_cmd(char *cmd);
 
 #endif
