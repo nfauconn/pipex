@@ -6,7 +6,7 @@
 /*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 18:25:20 by nfauconn          #+#    #+#             */
-/*   Updated: 2022/05/06 13:43:51 by nfauconn         ###   ########.fr       */
+/*   Updated: 2022/05/06 15:27:02 by nfauconn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,16 @@
 # define STDOUT 1
 # define STDERR 2
 # define CHILD 0
+
+typedef struct s_cmd
+{
+	char	*infile;
+	char	**cmd1;
+	char	**cmd2;
+	char	*outfile;
+	char	**env;
+}	t_cmd;
+
 
 char	**tokenized_cmd(char *cmd);
 
