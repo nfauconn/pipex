@@ -6,28 +6,11 @@
 /*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 18:32:16 by nfauconn          #+#    #+#             */
-/*   Updated: 2022/05/06 17:48:32 by nfauconn         ###   ########.fr       */
+/*   Updated: 2022/05/07 18:31:27 by nfauconn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-/* static void	check_file(char *file, char *cmd, int mode)
-{
-	char	*tmp;
-	int		end_name;
-
-	tmp = cmd;
-	while (*tmp != 32 || (*tmp < 9 && *tmp > 13))
-		tmp++;
-	end_name = tmp - cmd;
-	access(file, mode);
-	if (errno != 0)
-	{
-		ft_printf("%s\n", strerror(errno));
-		exit(EXIT_FAILURE);
-	}
-} */
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -41,6 +24,7 @@ int	main(int argc, char **argv, char **envp)
 		data.cmd2 = tokenized_cmd(argv[3]);
 		data.outfile_path = argv[4];
 		data.env = envp;
+		printf("data.env = %s\n", data.env[1]);
 		if (pipe(data.fd) != 0)
 			error_exit(&data, strerror(errno));
 		fork_id = fork();
@@ -50,10 +34,12 @@ int	main(int argc, char **argv, char **envp)
 			if (data.fd[0] == -1)
 				error_exit(&data, strerror(errno));
 			dup2(data.fd[0], 0);
-			execve(data.cmd1[0], data.cmd1, data.env);
+			execve("/usr/bin/wc", data.cmd1, data.env);
 		}
 		else
 		{
+	/* 		close(data.fd[1]);
+			read(data.fd[0], &x, ) */
 			wait(NULL);
 		}
 		clean_end(&data);

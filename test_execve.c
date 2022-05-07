@@ -1,10 +1,7 @@
 #include <stdio.h>
 
-int	main(int ac, char **argv)
+int	main()
 {
-	if (ac == 2)
-		printf("%s\n", argv[1]);
-	else
-		return(1);
+	printf("COUCOU\n");
 	return(0);
 }

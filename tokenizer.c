@@ -6,7 +6,7 @@
 /*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 13:17:14 by nfauconn          #+#    #+#             */
-/*   Updated: 2022/05/06 17:30:10 by nfauconn         ###   ########.fr       */
+/*   Updated: 2022/05/07 17:09:53 by nfauconn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ char	**tokenized_cmd(char *cmd)
 	int		size;
 	int		i;
 
+/* 	go_through_whitespaces(&cmd);
+	go_through_print_whithout_ws(&cmd);		// to pass the first word (= command) */
 	size = word_count(cmd);
 	tokenized = (char **)malloc(sizeof(char *) * (size + 1));
 	i = 0;
@@ -59,3 +61,18 @@ char	**tokenized_cmd(char *cmd)
 	tokenized[size] = NULL;
 	return (tokenized);
 }
+
+/* char	*tokenized_cmd(char *cmd)
+{
+	char	*tmp;
+	char	*tokenized;
+	int		size;
+
+	size = word_count(cmd);
+	go_through_whitespaces(&cmd);
+	tmp = cmd;
+	go_through_print_whithout_ws(&cmd);
+	tokenized = ft_substr(tmp, 0, cmd - tmp);
+	return (tokenized);
+}
+ */
