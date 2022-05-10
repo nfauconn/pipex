@@ -6,7 +6,7 @@
 /*   By: nono <nono@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 18:25:20 by nfauconn          #+#    #+#             */
-/*   Updated: 2022/05/10 11:58:22 by nono             ###   ########.fr       */
+/*   Updated: 2022/05/10 15:31:55 by nono             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,17 @@
 typedef struct s_data
 {
 	char	*infile_path;
+	int		fd_in;
 	char	**cmd1;
 	char	**cmd2;
 	char	*outfile_path;
+	int		fd_out;
 	char	**env;
 }	t_data;
 
 void	clean_end(t_data *data);
-void	error_exit(t_data *data, char *s);
+int		clean_open(t_data *data, int fd, char *file_path, int flag);
+void	error_exit(t_data *data, char *s1, char *s2, char *s3);
 void	exec_cmd(t_data *data);
 char	**tokenized_cmd(char *cmd);
 

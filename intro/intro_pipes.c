@@ -8,8 +8,8 @@ int	main(int argc, char **argv)
 	(void)argc;
 	(void)argv;
 	int	id;
-	int	fd[2]; //fd[0] = read end		 of the pipe 
-				// fd[1] = write end
+	int	fd[2]; //fd_in = read end		 of the pipe 
+				// fd_out = write end
 
 	if (pipe(fd) == -1)
 		printf("an error occured with opening the pipe\n");
@@ -18,21 +18,21 @@ int	main(int argc, char **argv)
 		printf("error occured with fork\n");
 	if (id == 0) //si on est dans le child
 	{
-		close(fd[0]);
+		close(fd_in);
 		int x;
 		printf("enter your age: ");
 		scanf("%d", &x);
-		if (write(fd[1], &x, sizeof(int)) == -1)
+		if (write(fd_out, &x, sizeof(int)) == -1)
 			printf("an error occured with opening the pipe\n");
-		close(fd[1]);
+		close(fd_out);
 	}
 	else
 	{
 		wait(NULL); // to avoid the child to become a zombie --> LEAKS
-		close(fd[1]);
+		close(fd_out);
 		int	y;
-		read(fd[0], &y, sizeof(int));
-		close(fd[0]);
+		read(fd_in, &y, sizeof(int));
+		close(fd_in);
 		printf("got from child process %d\n", y);
 	}
 	return (0);

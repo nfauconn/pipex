@@ -38,18 +38,18 @@ int	main(int argc, char **argv)
 
 	if (id == 0)
 	{
-		close(fd[0]);
-		if (write(fd[1], &sum, sizeof(int)) == -1)
+		close(fd_in);
+		if (write(fd_out, &sum, sizeof(int)) == -1)
 			printf("error\n");
-		close(fd[1]);
+		close(fd_out);
 	}
 	else
 	{
 		int	sum_from_child;
-		close(fd[1]);
-		if (read(fd[0], &sum_from_child, sizeof(sum_from_child)) == -1)
+		close(fd_out);
+		if (read(fd_in, &sum_from_child, sizeof(sum_from_child)) == -1)
 			printf("error\n");
-		close(fd[0]);
+		close(fd_in);
 
 		int	total_sum = sum + sum_from_child;
 		printf("total sum is : %d\n", total_sum);

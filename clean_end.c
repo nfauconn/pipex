@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   clean_end.c                                        :+:      :+:    :+:   */
+/*   pipex_clean_end.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nono <nono@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 15:30:04 by nfauconn          #+#    #+#             */
-/*   Updated: 2022/05/07 17:12:55 by nfauconn         ###   ########.fr       */
+/*   Updated: 2022/05/10 15:31:54 by nono             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ void	clean_end(t_data *data)
 {
 	int	i;
 
-/* 	if (data->cmd1)
-		free(data->cmd1); */
 	if (data->cmd1)
 	{
 		i = 0;
@@ -25,8 +23,6 @@ void	clean_end(t_data *data)
 			free(data->cmd1[i++]);
 		free(data->cmd1);
 	}
-/* 	if (data->cmd2)
-		free(data->cmd2); */
 	if (data->cmd2)
 	{
 		i = 0;
@@ -36,9 +32,14 @@ void	clean_end(t_data *data)
 	}
 }
 
-void	error_exit(t_data *data, char *s)
+void	error_exit(t_data *data, char *s1, char *s2, char *s3)
 {
-	ft_putstr_fd(s, 2);
+	ft_printf("%s%s: %s\n", s1, s2, s3);
+/* 	if (s1)
+		write(STDERR, s1, ft_strlen(s2));
+	if (s2)
+		write(STDERR, s2, ft_strlen(s2));
+	write(STDERR, "\n", 1); */
 	clean_end(data);
 	exit(EXIT_FAILURE);
 }
