@@ -3,48 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_main.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nono <nono@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 18:32:16 by nfauconn          #+#    #+#             */
-/*   Updated: 2022/05/07 18:31:27 by nfauconn         ###   ########.fr       */
+/*   Updated: 2022/05/10 12:03:15 by nono             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	main(int argc, char **argv, char **envp)
+static void fill_data(t_data *data, char **argv, char **envp)
 {
-	t_data	data;
-	int		fork_id;
+	data->infile_path = argv[1];
+	data->cmd1 = tokenized_cmd(argv[2]);
+	data->cmd2 = tokenized_cmd(argv[3]);
+	data->outfile_path = argv[4];
+	data->env = envp;
+	//		printf("data->env = %s\n", data->env[1]);			/!\ IF ENV -I
+}
+
+int main(int argc, char **argv, char **envp)
+{
+	t_data data;
 
 	if (argc == 5)
 	{
-		data.infile_path = argv[1];
-		data.cmd1 = tokenized_cmd(argv[2]);
-		data.cmd2 = tokenized_cmd(argv[3]);
-		data.outfile_path = argv[4];
-		data.env = envp;
-		printf("data.env = %s\n", data.env[1]);
-		if (pipe(data.fd) != 0)
-			error_exit(&data, strerror(errno));
-		fork_id = fork();
-		if (fork_id == 0)
-		{
-			data.fd[0] = open(data.infile_path, O_RDONLY);
-			if (data.fd[0] == -1)
-				error_exit(&data, strerror(errno));
-			dup2(data.fd[0], 0);
-			execve("/usr/bin/wc", data.cmd1, data.env);
-		}
-		else
-		{
-	/* 		close(data.fd[1]);
-			read(data.fd[0], &x, ) */
-			wait(NULL);
-		}
-		clean_end(&data);
+		fill_data(&data, argv, envp);
+		exec_cmd(&data);
 	}
 	else
 		write(STDERR, "Invalid number of arguments\n", 28);
+	clean_end(&data);
+	printf("FINI\n");
 	return (0);
 }

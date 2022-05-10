@@ -6,9 +6,10 @@ INCLUDES = -I includes -I libft/includes
 LD_FLAGS = -L libft
 COMP = ${CC} ${CFLAGS}
 RM	 = rm -rf
-SRCS =	clean_end.c \
+SRCS =	pipex_clean_end.c \
+		pipex_exec.c \
 		pipex_main.c \
-		tokenizer.c
+		pipex_tokenizer.c
 OBJS = ${addprefix ${OBJ_DIR}/,${SRCS:.c=.o}}
 
 ${OBJ_DIR}/%.o: %.c
