@@ -1,38 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sort_int_tab.c                                     :+:      :+:    :+:   */
+/*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfauconn <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mdankou <mdankou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/07/29 19:46:07 by nfauconn          #+#    #+#             */
-/*   Updated: 2021/09/08 10:08:22 by nfauconn         ###   ########.fr       */
+/*   Created: 2021/12/01 09:18:56 by mdankou           #+#    #+#             */
+/*   Updated: 2021/12/08 15:54:38 by mdankou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	*sort_int_tab(int *tab, int size)
+void	ft_lstadd_back(t_list **lst, t_list *new)
 {
-	int	temp;
-	int	i;
-	int	j;
+	t_list	*curr;
 
-	i = 0;
-	while (i < size)
+	if (!*lst)
 	{
-		j = i + 1;
-		while (j < size)
-		{
-			if (tab[j] < tab[i])
-			{
-				temp = tab[i];
-				tab[i] = tab[j];
-				tab[j] = temp;
-			}
-			j++;
-		}
-		i++;
+		*lst = new;
+		return ;
 	}
-	return (tab);
+	curr = *lst;
+	while (curr->next)
+		curr = curr->next;
+	curr->next = new;
 }

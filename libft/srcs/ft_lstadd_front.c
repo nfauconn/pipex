@@ -1,31 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rev_int_tab.c                                      :+:      :+:    :+:   */
+/*   ft_lstadd_front.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfauconn <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mdankou <mdankou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/07/29 19:48:27 by nfauconn          #+#    #+#             */
-/*   Updated: 2021/09/08 10:20:21 by nfauconn         ###   ########.fr       */
+/*   Created: 2021/12/01 09:15:56 by mdankou           #+#    #+#             */
+/*   Updated: 2021/12/01 09:16:44 by mdankou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "libft.h"
 
-void	rev_int_tab(int *tab, int size)
+void	ft_lstadd_front(t_list **lst, t_list *new)
 {
-	int	i;
-	int	j;
-	int	temp;
-
-	i = 0;
-	j = size - 1;
-	while (i < size / 2)
-	{
-		temp = tab[i];
-		tab[i] = tab[j];
-		tab[j] = temp;
-		i++;
-		j--;
-	}
+	new->next = (*lst);
+	*lst = new;
 }

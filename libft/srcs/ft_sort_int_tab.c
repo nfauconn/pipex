@@ -1,24 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   str_isdigit.c                                      :+:      :+:    :+:   */
+/*   ft_sort_int_tab.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfauconn <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/04 15:38:38 by nfauconn          #+#    #+#             */
-/*   Updated: 2021/09/08 10:46:54 by nfauconn         ###   ########.fr       */
+/*   Created: 2022/05/13 12:10:35 by nfauconn          #+#    #+#             */
+/*   Updated: 2022/05/13 12:10:38 by nfauconn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	str_isdigit(char *str)
+int	*ft_sort_int_tab(int *tab, int size)
 {
-	while (*str)
+	int	temp;
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < size)
 	{
-		if (!ft_isdigit(*str))
-			return (0);
-		str++;
+		j = i + 1;
+		while (j < size)
+		{
+			if (tab[j] < tab[i])
+			{
+				temp = tab[i];
+				tab[i] = tab[j];
+				tab[j] = temp;
+			}
+			j++;
+		}
+		i++;
 	}
-	return (1);
+	return (tab);
 }

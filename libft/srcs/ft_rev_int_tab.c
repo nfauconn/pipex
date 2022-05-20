@@ -1,29 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_rev_int_tab.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/22 18:32:16 by nfauconn          #+#    #+#             */
-/*   Updated: 2022/05/20 17:12:41 by nfauconn         ###   ########.fr       */
+/*   Created: 2022/05/13 12:09:57 by nfauconn          #+#    #+#             */
+/*   Updated: 2022/05/13 12:09:58 by nfauconn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "libft.h"
 
-int	main(int argc, char **argv, char **envp)
+void	ft_rev_int_tab(int *tab, int size)
 {
-	t_data	data;
+	int	i;
+	int	j;
+	int	temp;
 
-	if (argc == 5)
+	i = 0;
+	j = size - 1;
+	while (i < size / 2)
 	{
-		init_data(&data);
-		fill_data(&data, argv, envp);
-		exec_cmd(&data);
-		clean_end(&data);
+		temp = tab[i];
+		tab[i] = tab[j];
+		tab[j] = temp;
+		i++;
+		j--;
 	}
-	else
-		write(STDERR, "Invalid number of arguments\n", 28);
-	return (0);
 }

@@ -1,29 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   data_fill.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/22 18:32:16 by nfauconn          #+#    #+#             */
-/*   Updated: 2022/05/20 17:12:41 by nfauconn         ###   ########.fr       */
+/*   Created: 2022/05/20 12:01:21 by user42            #+#    #+#             */
+/*   Updated: 2022/05/20 17:11:58 by nfauconn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	main(int argc, char **argv, char **envp)
+void	fill_data(t_data *data, char **argv, char **envp)
 {
-	t_data	data;
-
-	if (argc == 5)
-	{
-		init_data(&data);
-		fill_data(&data, argv, envp);
-		exec_cmd(&data);
-		clean_end(&data);
-	}
-	else
-		write(STDERR, "Invalid number of arguments\n", 28);
-	return (0);
+	data->infile_path = argv[1];
+	data->fd_in = clean_open(data, data->fd_in, data->infile_path, O_RDONLY);
+	data->cmd1 = tokenized_cmd(argv[2]);
+	data->cmd2 = tokenized_cmd(argv[3]);
+	data->outfile_path = argv[4];
+	data->fd_out = clean_open(data, data->fd_out, data->outfile_path, O_WRONLY);
+	data->env = envp;
+	data->paths = split_paths(envp);
 }

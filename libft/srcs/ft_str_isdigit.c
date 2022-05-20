@@ -1,18 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_is_whitespace.c                                 :+:      :+:    :+:   */
+/*   ft_str_isdigit.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/06 13:47:20 by nfauconn          #+#    #+#             */
-/*   Updated: 2022/05/06 13:50:00 by nfauconn         ###   ########.fr       */
+/*   Created: 2022/05/13 12:10:54 by nfauconn          #+#    #+#             */
+/*   Updated: 2022/05/13 12:10:55 by nfauconn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_is_whitespace(int c)
+int	ft_str_isdigit(char *str)
 {
-	return (c == 32 || (c >= 9 && c <= 13));
+	while (*str)
+	{
+		if (!ft_isdigit(*str))
+			return (0);
+		str++;
+	}
+	return (1);
 }
