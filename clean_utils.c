@@ -6,7 +6,7 @@
 /*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 17:02:19 by nfauconn          #+#    #+#             */
-/*   Updated: 2022/05/20 17:20:48 by nfauconn         ###   ########.fr       */
+/*   Updated: 2022/05/21 19:27:29 by nfauconn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,5 @@ int	clean_open(t_data *data, int fd, char *file_path, int flag)
 void	clean_pipe_creation(t_data *data, int *redir)
 {
 	if (pipe(redir) == -1)
-		error_exit(data, "pipe: ", NULL, strerror(errno));
+		error_exit(data, "pipe: ", strerror(errno), NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:03:00 by nono              #+#    #+#             */
-/*   Updated: 2022/05/21 18:50:14 by nfauconn         ###   ########.fr       */
+/*   Updated: 2022/05/21 19:28:20 by nfauconn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void	child_exec(t_data *data, char **cmd, int *pipe)// char **cmd, int fd
 	}
 	close(redir[0]);
 	close(redir[1]);
-	error_exit(data, cmd[0], NULL, "command not found");
+	error_exit(data, cmd[0], "command not found", NULL);
 }
 
 void	exec_cmd(t_data *data)
@@ -55,7 +55,7 @@ void	exec_cmd(t_data *data)
 	clean_pipe_creation(data, pipe);
 	pid = fork();
 	if (pid < 0)
-		error_exit(data, "fork", NULL, strerror(errno));
+		error_exit(data, "fork", strerror(errno), NULL);
 	if (pid == 0)
 		child_exec(data, data->cmd1, pipe);//data->cmd1, data->fd_in, pipe[1]);
 	else
