@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/14 12:28:47 by user42            #+#    #+#             */
-/*   Updated: 2021/10/14 12:28:49 by user42           ###   ########.fr       */
+/*   Updated: 2022/05/21 18:55:50 by nfauconn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,5 +81,7 @@ int			main_loop(t_pf *pf, va_list *ap);
 void		parse_flag(t_pf *pf, t_conv *conv, va_list *ap);
 int			parse_conv(t_pf *pf);
 void		convert(va_list *ap, t_pf *pf);
+
+int		ft_printerror(const char *format, ...);
 
 #endif
