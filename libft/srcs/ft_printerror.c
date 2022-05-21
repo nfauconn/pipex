@@ -6,7 +6,7 @@
 /*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 18:53:47 by nfauconn          #+#    #+#             */
-/*   Updated: 2022/05/21 18:56:55 by nfauconn         ###   ########.fr       */
+/*   Updated: 2022/05/21 20:08:57 by nfauconn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	printerror_main_loop(t_pf *pf, va_list *ap)
 		pf->format = pf->ptr;
 	}
 	if (pf->buffer)
-		write(2, pf->buffer, (pf->bufsize));
+		write(STDERR_FILENO, pf->buffer, (pf->bufsize));
 	free(pf->buffer);
 	return ((int)pf->bufsize);
 }
@@ -39,6 +39,7 @@ int	ft_printerror(const char *format, ...)
 	t_pf	pf;
 
 	init_pf(&pf, format);
+	pf.fun_ptr[s] = &error_conv_s;
 	va_start(ap, format);
 	ret = printerror_main_loop(&pf, &ap);
 	va_end(ap);

@@ -6,7 +6,7 @@
 /*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 15:30:04 by nfauconn          #+#    #+#             */
-/*   Updated: 2022/05/21 19:40:43 by nfauconn         ###   ########.fr       */
+/*   Updated: 2022/05/21 20:09:14 by nfauconn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,7 @@ void	clean_end(t_data *data)
 
 void	error_exit(t_data *data, char *s1, char *s2, char *s3)
 {
-	if (!*s3)
-		ft_printerror("%s: %s\n", s1, s2);
-	else // if (s1 && s2 && s3)*/
-		ft_printerror("%s%s: %s\n", s1, s2, s3);
+	ft_printerror("%s%s: %s\n", s1, s2, s3);
 	clean_end(data);
 	exit(EXIT_FAILURE);
 }

@@ -6,7 +6,7 @@
 /*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/14 12:28:47 by user42            #+#    #+#             */
-/*   Updated: 2022/05/21 18:55:50 by nfauconn         ###   ########.fr       */
+/*   Updated: 2022/05/21 20:07:46 by nfauconn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ void		parse_flag(t_pf *pf, t_conv *conv, va_list *ap);
 int			parse_conv(t_pf *pf);
 void		convert(va_list *ap, t_pf *pf);
 
-int		ft_printerror(const char *format, ...);
+/* ERROR PRINTF */
+int			ft_printerror(const char *format, ...);
+void		error_conv_s(va_list *ap, t_conv *conv);
 
 #endif
