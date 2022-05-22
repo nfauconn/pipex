@@ -6,7 +6,7 @@
 /*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:03:00 by nono              #+#    #+#             */
-/*   Updated: 2022/05/21 20:20:00 by nfauconn         ###   ########.fr       */
+/*   Updated: 2022/05/22 15:43:21 by nfauconn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,11 @@ void	exec_cmd(t_data *data)
 		child_exec(data, data->cmd1, pipe);
 	else
 	{
-		wait(NULL);
 		pid = fork();
 		if (pid == 0)
 			child_exec(data, data->cmd2, pipe);
 		clean_close(pipe);
 	}
+	wait(NULL);
 	wait(NULL);
 }
