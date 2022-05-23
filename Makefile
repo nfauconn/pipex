@@ -1,4 +1,5 @@
 TARGET = pipex
+BONUS_TARGET = pipex_bonus
 
 INCLUDES = -I includes -I libft/includes
 LD_FLAGS = -L libft
@@ -26,10 +27,15 @@ RM	 = rm -rf
 
 all: ${TARGET}
 
-$(TARGET): ${OBJS}
-	@make -C libft
+makelib:
+	make -C libft
+
+$(TARGET): makelib ${OBJS}
 	@${COMP} ${LD_FLAGS} ${OBJS} -o ${TARGET} -lft
 	@echo "${TARGET} created"
+#	@make -C libft
+
+#${BONUS_TARGET}:${BONUS_OBJS}
 
 ${BUILD_DIR}/%.o: %.c
 	@mkdir -p ${BUILD_DIR}
