@@ -6,7 +6,7 @@
 /*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 16:22:20 by nfauconn          #+#    #+#             */
-/*   Updated: 2022/05/18 15:12:00 by nfauconn         ###   ########.fr       */
+/*   Updated: 2022/05/23 20:01:18 by nfauconn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ typedef struct s_list
 }	t_list;
 
 /* ARRAYS */
-int			ft_array_size(char **array);
+int			ft_2D_array_size(char **array);
+void		ft_2D_array_free(char **tab);
 
 /* CHARACTERS */
 int			ft_isalnum(int c);

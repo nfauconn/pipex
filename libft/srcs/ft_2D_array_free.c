@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_array_size.c                                    :+:      :+:    :+:   */
+/*   ft_2D_array_free.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/14 12:26:44 by user42            #+#    #+#             */
-/*   Updated: 2021/10/14 12:26:45 by user42           ###   ########.fr       */
+/*   Created: 2022/05/23 19:58:45 by nfauconn          #+#    #+#             */
+/*   Updated: 2022/05/23 20:00:03 by nfauconn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_array_size(char **array)
+void	ft_2D_array_free(char **tab)
 {
 	int	i;
 
 	i = 0;
-	if (!array)
-		return (-1);
-	while (array[i])
-		i++;
-	return (i);
+	while (tab[i])
+		free(tab[i++]);
+	free(tab);
 }
