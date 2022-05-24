@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bonus_pipex.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 18:25:20 by nfauconn          #+#    #+#             */
-/*   Updated: 2022/05/23 21:04:37 by nfauconn         ###   ########.fr       */
+/*   Updated: 2022/05/24 19:52:49 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,26 +34,26 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }	t_cmd;
 
-typedef struct s_data_b
+typedef struct s_data
 {
 	int		fd_in;
 	t_cmd	*cmd;
 	int		fd_out;
 	char	**env;
 	char	**paths;
-}	t_data_b;
+}	t_data;
 
-void	bonus_clean_close(int fd[2]);
-void	bonus_clean_dup(t_data_b *data, char **cmd, int old_fd, int new_fd);
-void	bonus_clean_end(t_data_b *data);
-int		bonus_clean_open(t_data_b *data, int fd, char *file_path, int flag);
-void	bonus_clean_pipe_creation(t_data_b *data, int *redir);
-void	bonus_error_exit(t_data_b *data, char *s1, char *s2, char *s3);
-void	bonus_exec_cmd(t_data_b *data);
-void	bonus_fill_data(t_data_b *data, int argc, char **argv, char **envp);
-void	bonus_handling(int argc, char **argv, char **envp);
-void	bonus_init_data_b(t_data_b *data);
-char	**bonus_split_paths(char **env);
-char	**bonus_tokenized_cmd(char *cmd);
+void	clean_close(int fd[2]);
+void	clean_dup(t_data *data, char **cmd, int old_fd, int new_fd);
+void	clean_end(t_data *data);
+int		clean_open(t_data *data, int fd, char *file_path, int flag);
+void	clean_pipe_creation(t_data *data, int *redir);
+void	error_exit(t_data *data, char *s1, char *s2, char *s3);
+void	exec_cmd(t_data *data);
+void	fill_data(t_data *data, int argc, char **argv, char **envp);
+void	handling(int argc, char **argv, char **envp);
+void	init_data(t_data *data);
+char	**split_paths(char **env);
+char	**tokenized_cmd(char *cmd);
 
 #endif

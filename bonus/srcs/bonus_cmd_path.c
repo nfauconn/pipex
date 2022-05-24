@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   bonus_cmd_path.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 18:21:00 by nfauconn          #+#    #+#             */
-/*   Updated: 2022/05/23 20:26:30 by nfauconn         ###   ########.fr       */
+/*   Updated: 2022/05/24 19:51:03 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bonus_pipex.h"
 
-char	**bonus_split_paths(char **env)
+char	**split_paths(char **env)
 {
 	int		i;
 	char	*trunc;

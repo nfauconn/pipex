@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   bonus_data_init.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 17:06:32 by nfauconn          #+#    #+#             */
-/*   Updated: 2022/05/23 21:04:42 by nfauconn         ###   ########.fr       */
+/*   Updated: 2022/05/24 19:51:49 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bonus_pipex.h"
 
-void	bonus_init_data_b(t_data_b *data)
+void	init_data(t_data *data)
 {
 	data->fd_in = 0;
 	data->cmd = NULL;

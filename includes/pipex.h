@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 18:25:20 by nfauconn          #+#    #+#             */
-/*   Updated: 2022/05/23 22:31:20 by nfauconn         ###   ########.fr       */
+/*   Updated: 2022/05/24 19:56:14 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ void	clean_pipe_creation(t_data *data, int *redir);
 void	error_exit(t_data *data, char *s1, char *s2, char *s3);
 void	exec_cmd(t_data *data);
 void	fill_data(t_data *data, char **argv, char **envp);
-void	handling(char **argv, char **envp);
 void	init_data(t_data *data);
 char	**split_paths(char **env);
 char	**tokenized_cmd(char *cmd);

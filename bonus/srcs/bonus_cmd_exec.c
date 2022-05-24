@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bonus_cmd_exec.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:03:00 by nono              #+#    #+#             */
-/*   Updated: 2022/05/23 21:04:40 by nfauconn         ###   ########.fr       */
+/*   Updated: 2022/05/24 19:51:49 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,49 +29,49 @@ static int	find_path_then_execve(char **cmd, char **paths, char **env)
 	return (0);
 }
 
-static void	child_last_exec(t_data_b *data, char **cmd, int *pipe)
+static void	child_last_exec(t_data *data, char **cmd, int *pipe)
 {
 	int		redir[2];
 
 	close(pipe[1]);
 	redir[0] = pipe[0];
 	redir[1] = data->fd_out;
-	bonus_clean_dup(data, cmd, redir[0], STDIN_FILENO);
-	bonus_clean_dup(data, cmd, redir[1], STDOUT_FILENO);
+	clean_dup(data, cmd, redir[0], STDIN_FILENO);
+	clean_dup(data, cmd, redir[1], STDOUT_FILENO);
 	if (!find_path_then_execve(cmd, data->paths, data->env))
 	{
 		close(redir[0]);
 		close(redir[1]);
-		bonus_error_exit(data, cmd[0], NULL, "command not found");
+		error_exit(data, cmd[0], NULL, "command not found");
 	}
 }
 
-static void	child_first_exec(t_data_b *data, char **cmd, int *pipe)
+static void	child_first_exec(t_data *data, char **cmd, int *pipe)
 {
 	int		redir[2];
 
 	close(pipe[0]);
 	redir[0] = data->fd_in;
 	redir[1] = pipe[1];
-	bonus_clean_dup(data, cmd, redir[0], STDIN_FILENO);
-	bonus_clean_dup(data, cmd, redir[1], STDOUT_FILENO);
+	clean_dup(data, cmd, redir[0], STDIN_FILENO);
+	clean_dup(data, cmd, redir[1], STDOUT_FILENO);
 	if (!find_path_then_execve(cmd, data->paths, data->env))
 	{
 		close(redir[0]);
 		close(redir[1]);
-		bonus_error_exit(data, cmd[0], NULL, "command not found");
+		error_exit(data, cmd[0], NULL, "command not found");
 	}
 }
 
-void	bonus_exec_cmd(t_data_b *data)
+void	exec_cmd(t_data *data)
 {
 	int		pipe[2];
 	pid_t	pid;
 
-	bonus_clean_pipe_creation(data, pipe);
+	clean_pipe_creation(data, pipe);
 	pid = fork();
 	if (pid < 0)
-		bonus_error_exit(data, "fork", NULL, strerror(errno));
+		error_exit(data, "fork", NULL, strerror(errno));
 	if (pid == 0)
 		child_first_exec(data, data->cmd->tab, pipe);
 	else
@@ -83,7 +83,7 @@ void	bonus_exec_cmd(t_data_b *data)
 				data->cmd = data->cmd->next;
 			child_last_exec(data, data->cmd->tab, pipe);
 		}
-		bonus_clean_close(pipe);
+		clean_close(pipe);
 	}
 	wait(NULL);
 	wait(NULL);
