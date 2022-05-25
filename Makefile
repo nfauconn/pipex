@@ -1,7 +1,12 @@
 TARGET = pipex
+BONUS_TARGET = pipex_bonus
 
-BUILD_DIR  = ./objs
 SRC_DIR  = ./srcs
+BUILD_DIR  = ./objs
+INC_DIR = ./includes
+LIBFT_DIR = ./libft
+LIBFT_INC_DIR = ./libft/includes
+BONUS_DIR = ./bonus
 
 SRCS := \
 		./srcs/clean_end.c \
@@ -18,33 +23,43 @@ VPATH = ${SRC_DIR}:${INC_DIR}:${BUILD_DIR}
 
 CC = clang
 CFLAGS = -Wall -Wextra -Werror -g
-LD_FLAGS = -L libft
-INCLUDES = -I includes -I libft/includes
+LD_FLAGS = -L ${LIBFT_DIR}
+INCLUDES = -I ${INC_DIR} -I ${LIBFT_INC_DIR}
 COMP = ${CC} ${CFLAGS}
+MAKE_C = make -C
+CLEAN_C = make clean -C
+FCLEAN_C = make fclean -C
+MKDIR = mkdir -p
 RM = rm -rf
 
 all: libftcreat ${TARGET}
 
 libftcreat:
-	@make -C libft
+	@${MAKE_C} ${LIBFT_DIR}
+
+bonus:
+	@${MAKE_C} ${BONUS_DIR}
 
 ${TARGET}: ${OBJS}
 	@${COMP} ${LD_FLAGS} ${OBJS} -o ${TARGET} -lft
 	@echo "${TARGET} created"
 
 ${BUILD_DIR}/%.o: %.c
-	@mkdir -p ${BUILD_DIR}
+	@${MKDIR} ${BUILD_DIR}
 	@echo create: ${@:%=%}
 	@${COMP} ${INCLUDES} -c $< -o $@
 
 clean:
-	@make clean -C libft
+	@${CLEAN_C} ${LIBFT_DIR}
+	@${CLEAN_C} ${BONUS_DIR}
 	@${RM} ${BUILD_DIR}
 	@echo "objs deleted"
 
 fclean: clean
-	@make fclean -C libft
+	@${FCLEAN_C} ${LIBFT_DIR}
+	@${FCLEAN_C} ${BONUS_DIR}
 	@${RM} ${TARGET}
+	@${RM} ${BONUS_TARGET}
 	@echo "program deleted"
 
 re: fclean all

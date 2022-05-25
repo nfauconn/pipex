@@ -3,7 +3,7 @@ TARGET = pipex_bonus
 SRC_DIR  = ./srcs
 BUILD_DIR  = ./objs
 INC_DIR = ./includes
-LIBFT = ../libft/
+LIBFT = ../libft
 
 SRCS := \
 		./srcs/bonus_clean_end.c \
@@ -13,7 +13,6 @@ SRCS := \
 		./srcs/bonus_cmd_tokenizer.c \
 		./srcs/bonus_data_init.c \
 		./srcs/bonus_data_fill.c \
-		./srcs/bonus_handling.c \
 		./srcs/bonus_main.c
 
 OBJS := ${subst ${SRC_DIR}, ${BUILD_DIR}, ${SRCS:%.c=%.o}}
@@ -25,6 +24,7 @@ LD_FLAGS = -L ${LIBFT}
 INCLUDES = -I includes -I ../libft/includes
 COMP = ${CC} ${CFLAGS}
 RM = rm -rf
+COPY = cp
 
 all: libftcreat ${TARGET}
 
@@ -38,15 +38,15 @@ ${TARGET}: ${OBJS}
 ${BUILD_DIR}/%.o: %.c
 	@mkdir -p ${BUILD_DIR}
 	@echo create: ${@:%=%}
-	${COMP} ${INCLUDES} -c $< -o $@
+	@${COMP} ${INCLUDES} -c $< -o $@
 
 clean:
-	@make clean -C libft
+	@make clean -C ${LIBFT}
 	@${RM} ${BUILD_DIR}
 	@echo "objs deleted"
 
 fclean: clean
-	@make fclean -C libft
+	@make fclean -C ${LIBFT}
 	@${RM} ${TARGET}
 	@echo "program deleted"
 
