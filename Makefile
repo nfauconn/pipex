@@ -39,6 +39,7 @@ libftcreat:
 
 bonus:
 	@${MAKE_C} ${BONUS_DIR}
+	@cp -R bonus/pipex_bonus .
 
 ${TARGET}: ${OBJS}
 	@${COMP} ${LD_FLAGS} ${OBJS} -o ${TARGET} -lft

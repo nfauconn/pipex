@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bonus_clean_end.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 15:30:04 by nfauconn          #+#    #+#             */
-/*   Updated: 2022/05/24 19:51:49 by user42           ###   ########.fr       */
+/*   Updated: 2022/05/31 17:50:53 by nfauconn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,24 @@
 
 void	clean_end(t_data *data)
 {
-	t_cmd	**tmp;
+	t_cmd	*to_free;
 
-	tmp = &data->cmd;
-	while (data->cmd)
-	{
-		ft_2D_array_free(data->cmd->tab);
-		data->cmd = data->cmd->next;
-	}
-	free(*tmp);
 	close(data->fd_in);
+	if (data->cmd)
+	{
+		while (data->cmd)
+		{
+			ft_2D_array_free(data->cmd->tab);
+			to_free = data->cmd;
+			data->cmd = data->cmd->next;
+			free(to_free);
+		}
+	}
 	close(data->fd_out);
+	if (data->env)
+		ft_lstclear(&data->env, free);
+	if (data->paths)
+		ft_2D_array_free(data->paths);
 }
 
 void	error_exit(t_data *data, char *s1, char *s2, char *s3)

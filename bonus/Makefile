@@ -13,13 +13,15 @@ SRCS := \
 		./srcs/bonus_cmd_tokenizer.c \
 		./srcs/bonus_data_init.c \
 		./srcs/bonus_data_fill.c \
+		./srcs/bonus_env_list.c \
+		./srcs/bonus_lst_utils.c \
 		./srcs/bonus_main.c
 
 OBJS := ${subst ${SRC_DIR}, ${BUILD_DIR}, ${SRCS:%.c=%.o}}
 VPATH = ${SRC_DIR}:${INC_DIR}:${BUILD_DIR}:${LIBFT}
 
 CC = clang
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 LD_FLAGS = -L ${LIBFT}
 INCLUDES = -I includes -I ../libft/includes
 COMP = ${CC} ${CFLAGS}
@@ -31,7 +33,7 @@ all: libftcreat ${TARGET}
 libftcreat:
 	@make -C ${LIBFT}
 
-${TARGET}: ${OBJS}
+${TARGET}: ${OBJS} Makefile
 	@${COMP} ${LD_FLAGS} ${OBJS} -o ${TARGET} -lft
 	@echo "${TARGET} created"
 
