@@ -65,4 +65,13 @@ fclean: clean
 
 re: fclean all
 
+
+TIME = `date +"%d/%m/%Y %Hh%M %Z"`
+USER := $(shell env | grep USER | tail --bytes=+6)
+
+git: fclean
+	git add .
+	git commit -m "by $(USER) at $(TIME)"
+	git push
+
 .PHONY: all clean fclean re bonus
