@@ -6,7 +6,7 @@
 /*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 17:02:19 by nfauconn          #+#    #+#             */
-/*   Updated: 2022/05/21 19:27:29 by nfauconn         ###   ########.fr       */
+/*   Updated: 2022/06/05 17:57:48 by nfauconn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	clean_open(t_data *data, int fd, char *file_path, int flag)
 	if (flag == O_RDONLY)
 		fd = open(file_path, O_RDONLY);
 	else if ((int)flag == (int)O_WRONLY)
-		fd = open(file_path, O_WRONLY | O_CREAT, 0644);
+		fd = open(file_path, O_WRONLY | O_CREAT | O_TRUNC, 644);
 	if (fd == -1)
 		error_exit(data, "open: ", file_path, strerror(errno));
 	return (fd);

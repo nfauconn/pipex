@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bonus_cmd_exec.c                                   :+:      :+:    :+:   */
+/*   bonus_cmd_exec2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:03:00 by nono              #+#    #+#             */
-/*   Updated: 2022/06/02 17:18:17 by nfauconn         ###   ########.fr       */
+/*   Updated: 2022/06/05 19:14:28 by nfauconn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,106 +29,105 @@ static int	find_path_then_execve(char **cmd, char **paths, char **env)
 	return (0);
 }
 
-/* static void	parent_exec(t_data *data, char **cmd, int *pipe)
+static int	child_exec(t_data *data, t_cmd *cmd)
 {
+	if (cmd->index == 0)
 
+//	ft_printerror("\ncmd %d ---- fd_in = %d | fd_out = %d\n", cmd->index, cmd->fd_in, cmd->fd_out);
+	clean_dup(data, cmd->tab, cmd->fd_in, STDIN_FILENO);
+	clean_dup(data, cmd->tab, cmd->fd_out, STDOUT_FILENO);
+	if (!find_path_then_execve(cmd->tab, data->paths, data->env_tab))
+	{
+		ft_printerror("!!!!!!!!! %s: command n.%d not found ------- cmd->fd_in = %d | cmd->fd_out = %d\n", cmd->tab[0], cmd->index, cmd->fd_in, cmd->fd_out);
+		return (1);
+		//error_exit(data, cmd->tab[0], NULL, "command not found");
+	}
+	return (0);
 }
-
-static void	child_exec(t_data *data, char **cmd, int *pipe)
-{
-
-}
-
-void	last_exec(t_data *data, char **cmd, int *pipe)
-{
-
-}
-
-
-void	first_exec(t_data *data, char **cmd, int *pipe)
-{
-
-} */
 
 int	exec_cmd(t_data *data)
 {
-	int		status;
-	int		p1[2];
-	int		p2[2];
+	int		last_cmd_pipe_read_fd;
+	int		redir[data->nb_cmd][2];
 	pid_t	pid;
+	t_cmd	*cmd;
 
-	clean_pipe_creation(data, p1);
-	clean_pipe_creation(data, p2);
-	pid = fork();
-	if (pid == 0)
+	cmd = data->cmd;
+	ft_printerror("stdin = %d\nstdout = %d\ndata->fd_in = %d\ndata->fd_out = %d\n", STDIN_FILENO, STDOUT_FILENO, data->fd_in, data->fd_out);
+	while (i < data->nb_cmd - 1)
 	{
-		// first_exec
-		close(p1[0]);
-		close(p2[0]);
-		close(p2[1]);
-		clean_dup(data, data->cmd->tab, data->fd_in, STDIN_FILENO);
-		clean_dup(data, data->cmd->tab, p1[1], STDOUT_FILENO);
-ft_printerror("data->cmd->tab[0] = %s\n", data->cmd->tab[0]);
-		if (!find_path_then_execve(data->cmd->tab, data->paths, data->env_tab))
-			return (1);//error_exit(data, data->cmd->tab[0], NULL, "command not found");
+		
+		ft_printerror("created pipe n.%d, redir[%d][0] = %d, redir[%d][1]= %d\n", i, i, redir[i][0], i, redir[i][1]);
+		i++;
 	}
-	else
+	i = 0;
+	while (cmd)
 	{
-		data->cmd = data->cmd->next;
+		clean_pipe_creation(data, redir[cmd->index]);
 		pid = fork();
+		if (pid < 0)
+			error_exit(data, "fork", NULL, strerror(errno));//return (errno); 
 		if (pid == 0)
 		{
-			close(p1[1]);
-			close(p2[0]);
-			clean_dup(data, data->cmd->tab, p1[0], STDIN_FILENO);
-//			clean_dup(data, data->cmd->tab, p2[1], STDOUT_FILENO);
-//ft_printerror("data->cmd->tab[0] in 2nd exec = %s\n", data->cmd->tab[0]);
-			if (!find_path_then_execve(data->cmd->tab, data->paths, data->env_tab))
-				return(2);//error_exit(data, data->cmd->tab[0], NULL, "command not found");
-		}
-		else
-		{
-			data->cmd = data->cmd->next;
-			pid = fork();
-			if (pid == 0)
+			if (cmd->index == 0)
 			{
-				close(p1[0]);
-				close(p2[1]);
-				clean_dup(data, data->cmd->tab, p2[0], STDIN_FILENO);
-				clean_dup(data, data->cmd->tab, p1[1], STDOUT_FILENO);
-ft_printerror("data->cmd->tab[0] in third exec = %s\n", data->cmd->tab[0]);
-				if (!find_path_then_execve(data->cmd->tab, data->paths, data->env_tab))
-					return(3);//error_exit(data, data->cmd->tab[0], NULL, "command not found");				
+				cmd->fd_in = data->fd_in;
+				cmd->fd_out = redir[cmd->index][1];
+				while (cmd->i < data->nb_cmd - 1)
+				{
+					close(redir[cmd->i][0]);
+					if (redir[cmd->i][1] != cmd->fd_out)
+						close(redir[cmd->i][1]);
+					cmd->i++;
+				}
+				child_exec(data, cmd);
+			}
+			else if (cmd->index > 0 && cmd->index != data->nb_cmd - 1)
+			{
+				cmd->fd_in = redir[cmd->index - 1][0];
+				cmd->fd_out = redir[cmd->index][1];
+				while (cmd->i < data->nb_cmd - 1)
+				{
+					if (redir[cmd->i][0] != cmd->fd_in)
+						close(redir[cmd->i][0]);
+					if (redir[cmd->i][1] != cmd->fd_out)
+						close(redir[cmd->i][1]);
+					cmd->i++;
+				}
+				child_exec(data, cmd);
 			}
 			else
 			{
-				// last exec
-				data->cmd = data->cmd->next;
-				pid = fork();
-				if (pid == 0)
+				cmd->fd_in = redir[cmd->index - 1][0];
+				cmd->fd_out = data->fd_out;
+				while (cmd->i < data->nb_cmd - 1)
 				{
-					close(p1[1]);
-					close(p2[0]);
-					close(p2[1]);
-					clean_dup(data, data->cmd->tab, p1[0], STDIN_FILENO);
-					clean_dup(data, data->cmd->tab, data->fd_out, STDOUT_FILENO);
-ft_printerror("data->cmd->tab[0] in last exec= %s\n", data->cmd->tab[0]);
-					if (!find_path_then_execve(data->cmd->tab, data->paths, data->env_tab))
-						return(4);//error_exit(data, data->cmd->tab[0], NULL, "command not found");
+					if (redir[cmd->i][0] != cmd->fd_in)
+						close(redir[cmd->i][0]);
+					close(redir[cmd->i][1]);
+					cmd->i++;
 				}
+				child_exec(data, cmd);
 			}
+			return (0) ;
+		}
+		else
+		{
+			last_cmd_pipe_read_fd = redir[]
+			cmd = cmd->next;
 		}
 	}
-	close(p1[0]);
-	close(p1[1]);
-	close(p2[0]);
-	close(p2[1]);	
-	wait(&status);
-	if (WIFEXITED(status))
-	wait(NULL);
-	wait(NULL);
-/* 	i = 0;
-	while (i++ < 4)
-		wait(NULL); */
+	int	i;
+	i = 0;
+	while (i < data->nb_cmd - 1)
+	{
+		close(redir[i][0]);
+		close(redir[i][1]);
+	}
+	i = 0;
+	while (i++ < data->nb_cmd - 1)
+	{
+		wait(NULL);
+	}
 	return (0);
 }

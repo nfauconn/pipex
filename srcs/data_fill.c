@@ -6,7 +6,7 @@
 /*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 12:01:21 by user42            #+#    #+#             */
-/*   Updated: 2022/05/20 17:11:58 by nfauconn         ###   ########.fr       */
+/*   Updated: 2022/06/05 17:58:05 by nfauconn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 void	fill_data(t_data *data, char **argv, char **envp)
 {
 	data->infile_path = argv[1];
+	printf("coucou\n");
 	data->fd_in = clean_open(data, data->fd_in, data->infile_path, O_RDONLY);
+	printf("coucou\n");
 	data->cmd1 = tokenized_cmd(argv[2]);
 	data->cmd2 = tokenized_cmd(argv[3]);
 	data->outfile_path = argv[4];
