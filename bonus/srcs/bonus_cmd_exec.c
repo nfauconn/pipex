@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bonus_cmd_exec.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:03:00 by nono              #+#    #+#             */
-/*   Updated: 2022/06/04 14:58:44 by user42           ###   ########.fr       */
+/*   Updated: 2022/06/05 16:35:34 by nfauconn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,36 +29,41 @@ static int	find_path_then_execve(char **cmd, char **paths, char **env)
 	return (0);
 }
 
-static void	child_exec(t_data *data, t_cmd *cmd, int read_fd, int write_fd)
+static int	child_exec(t_data *data, t_cmd *cmd)
 {
-	clean_dup(data, cmd->tab, read_fd, STDIN_FILENO);
-	clean_dup(data, cmd->tab, write_fd, STDOUT_FILENO);
+	ft_printerror("\ncmd %d ---- fd_in = %d | fd_out = %d\n", cmd->index, cmd->fd_in, cmd->fd_out);
+	clean_dup(data, cmd->tab, cmd->fd_in, STDIN_FILENO);
+	clean_dup(data, cmd->tab, cmd->fd_out, STDOUT_FILENO);
 	if (!find_path_then_execve(cmd->tab, data->paths, data->env_tab))
 	{
-		error_exit(data, cmd->tab[0], NULL, "command not found");
+		ft_printerror("%s: command n.%d not found\ncmd->fd_in = %d | cmd->fd_out = %d\n", cmd->tab[0], cmd->index, cmd->fd_in, cmd->fd_out);
+		return (1);
+		//error_exit(data, cmd->tab[0], NULL, "command not found");
 	}
+	return (0);
 }
 
 int	exec_cmd(t_data *data)
 {
 	int		i;
 	int		j;
-	int		fd_in;
-	int		fd_out;
+	int		status;
 	int		redir[data->nb_cmd][2];
 	pid_t	pid;
-	t_cmd	*tmp;
+	t_cmd	*cmd;
 
-	tmp = data->cmd;
+	cmd = data->cmd;
 	i = 0;
+	ft_printerror("stdin = %d\nstdout = %d\ndata->fd_in = %d\ndata->fd_out = %d\n", STDIN_FILENO, STDOUT_FILENO, data->fd_in, data->fd_out);
 	while (i < data->nb_cmd)
 	{
 		clean_pipe_creation(data, redir[i]);
+		ft_printerror("created pipe n.%d, redir[%d][0] = %d, redir[%d][1]= %d\n", i, i, redir[i][0], i, redir[i][1]);
 		i++;
 	}
 	i = 0;
 	j = 0;
-	while (tmp && i < data->nb_cmd)
+	while (cmd && i < data->nb_cmd)
 	{
 		pid = fork();
 		if (pid < 0)
@@ -67,58 +72,64 @@ int	exec_cmd(t_data *data)
 		{
 			if (i == 0)
 			{
-				close(redir[0][0]);
-				while (redir[++i])
+				ft_printerror("COUCOU\n");
+				cmd->fd_in = data->fd_in;
+				cmd->fd_out = redir[i][1];
+				while (i < data->nb_cmd)
 				{
 					close(redir[i][0]);
-					close(redir[i][1]);
+					if (redir[i][1] != cmd->fd_out)
+						close(redir[i][1]);
 				}
-				i = 0;
-				child_exec(data, tmp, data->fd_in, redir[i][1]);
+				ft_printerror("first cmd fd_in = %d | fd_out = %d\n", cmd->fd_in, cmd->fd_out);
+				child_exec(data, cmd);
 			}
 			else if (i != data->nb_cmd - 1)
 			{
-				close(redir[i][0]);
-				close(redir[i - 1][1]);
-				fd_in = redir[i - 1][0];
-				fd_out = redir[i][1];
+				cmd->fd_in = redir[i - 1][0];
+				cmd->fd_out = redir[i][1];
 				j = i;
 				i = 0;
-				while (redir[i])
+				while (i < data->nb_cmd)
 				{
-					if (redir[i][0] != fd_in)
+					if (redir[i][0] != cmd->fd_in)
 						close(redir[i][0]);
-					if (redir[i][1] != fd_out)
+					if (redir[i][1] != cmd->fd_out)
 						close(redir[i][1]);
 					i++;
 				}
 				i = j;
-				child_exec(data, tmp, redir[i - 1][0], redir[i][1]);
+				child_exec(data, cmd);
 			}
 			else
 			{
-				close(redir[i][1]);
-				fd_in = redir[i][0];
+				cmd->fd_in = redir[i][0];
+				cmd->fd_out = data->fd_out;
 				j = i;
 				i = 0;
-				while (redir[i])
+				while (i < data->nb_cmd)
 				{
-					if (redir[i][0] != fd_in)
+					if (redir[i][0] != cmd->fd_in)
 						close(redir[i][0]);
 					close(redir[i][1]);
 				}
-				child_exec(data, tmp, redir[i][0], data->fd_out);
+				i = j;
+				ft_printerror("last cmd (n.%d) fd_in = %d | fd_out = %d\n", cmd->index, cmd->fd_in, cmd->fd_out);
+				child_exec(data, cmd);
 			}
 			break ;
 		}
 		else
 		{
-			tmp = tmp->next;
+			cmd = cmd->next;
 			i++;
 		}
 	}
-	i = 0;
-	while (i++ < data->nb_cmd - 1)
-		wait(NULL);
+ 	i = 0;
+	while (i++ < data->nb_cmd)
+	{
+		wait(&status);
+	}
+	/* HANDLE CHILD SEGV */
 	return (0);
 }
