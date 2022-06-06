@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bonus_cmd_exec2.c                                  :+:      :+:    :+:   */
+/*   bonus_cmd_exec.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:03:00 by nono              #+#    #+#             */
-/*   Updated: 2022/06/05 19:14:28 by nfauconn         ###   ########.fr       */
+/*   Updated: 2022/06/06 18:42:39 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,20 @@ static int	find_path_then_execve(char **cmd, char **paths, char **env)
 	while (paths[i])
 	{
 		cmd_path = ft_strjoin(paths[i], cmd[0]);
-		execve(cmd_path, cmd, env);
+		if (access(cmd_path, F_OK | X_OK) != -1)
+		{
+			execve(cmd_path, cmd, env);
+		}
 		free(cmd_path);
 		cmd_path = NULL;
 		i++;
 	}
 	return (0);
-}
+}		
 
 static int	child_exec(t_data *data, t_cmd *cmd)
 {
-	if (cmd->index == 0)
-
-//	ft_printerror("\ncmd %d ---- fd_in = %d | fd_out = %d\n", cmd->index, cmd->fd_in, cmd->fd_out);
+	ft_printerror("\ncmd %d ---- fd_in = %d | fd_out = %d\n", cmd->index, cmd->fd_in, cmd->fd_out);
 	clean_dup(data, cmd->tab, cmd->fd_in, STDIN_FILENO);
 	clean_dup(data, cmd->tab, cmd->fd_out, STDOUT_FILENO);
 	if (!find_path_then_execve(cmd->tab, data->paths, data->env_tab))
@@ -47,29 +48,33 @@ static int	child_exec(t_data *data, t_cmd *cmd)
 
 int	exec_cmd(t_data *data)
 {
-	int		last_cmd_pipe_read_fd;
+	int		i;
+	int		j;
+//	int		fd;
+	int status;
 	int		redir[data->nb_cmd][2];
 	pid_t	pid;
 	t_cmd	*cmd;
 
 	cmd = data->cmd;
+	i = 0;
 	ft_printerror("stdin = %d\nstdout = %d\ndata->fd_in = %d\ndata->fd_out = %d\n", STDIN_FILENO, STDOUT_FILENO, data->fd_in, data->fd_out);
 	while (i < data->nb_cmd - 1)
 	{
-		
+		clean_pipe_creation(data, redir[i]);
 		ft_printerror("created pipe n.%d, redir[%d][0] = %d, redir[%d][1]= %d\n", i, i, redir[i][0], i, redir[i][1]);
 		i++;
 	}
 	i = 0;
-	while (cmd)
+	j = 0;
+	while (cmd && i < data->nb_cmd)
 	{
-		clean_pipe_creation(data, redir[cmd->index]);
 		pid = fork();
 		if (pid < 0)
 			error_exit(data, "fork", NULL, strerror(errno));//return (errno); 
 		if (pid == 0)
 		{
-			if (cmd->index == 0)
+			if (i == 0)
 			{
 				cmd->fd_in = data->fd_in;
 				cmd->fd_out = redir[cmd->index][1];
@@ -82,7 +87,7 @@ int	exec_cmd(t_data *data)
 				}
 				child_exec(data, cmd);
 			}
-			else if (cmd->index > 0 && cmd->index != data->nb_cmd - 1)
+			else if (i > 0 && i != data->nb_cmd - 1)
 			{
 				cmd->fd_in = redir[cmd->index - 1][0];
 				cmd->fd_out = redir[cmd->index][1];
@@ -107,27 +112,21 @@ int	exec_cmd(t_data *data)
 					close(redir[cmd->i][1]);
 					cmd->i++;
 				}
+				ft_printerror("last cmd (n.%d) fd_in = %d | fd_out = %d\n", cmd->index, cmd->fd_in, cmd->fd_out);
 				child_exec(data, cmd);
 			}
 			return (0) ;
 		}
 		else
 		{
-			last_cmd_pipe_read_fd = redir[]
+			close(redir[i][0]);
+			close(redir[i][1]);
 			cmd = cmd->next;
+			i++;
 		}
 	}
-	int	i;
-	i = 0;
-	while (i < data->nb_cmd - 1)
-	{
-		close(redir[i][0]);
-		close(redir[i][1]);
-	}
-	i = 0;
-	while (i++ < data->nb_cmd - 1)
-	{
-		wait(NULL);
-	}
+	while (--i)
+		wait(&status);
+	/* HANDLE CHILD SEGV */
 	return (0);
 }
