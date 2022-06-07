@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bonus_cmd_exec.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfauconn <nfauconn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:03:00 by nono              #+#    #+#             */
-/*   Updated: 2022/06/06 19:30:11 by user42           ###   ########.fr       */
+/*   Updated: 2022/06/07 11:23:13 by nfauconn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,19 @@ static int	child_exec(t_data *data, t_cmd *cmd)
 	}
 	return (0);
 }
+/* 
+static void		assign_fd(t_data *data, t_cmd *cmd, int redir[2])
+{
+	if (cmd->index == 0)
+		cmd->fd_in = data->fd_in;
+	else
+		cmd->fd_in = redir[0];
+	if (cmd->index == data->nb_cmd - 1)
+		cmd->fd_out = data->fd_out;
+	else
+		cmd->fd_out = redir[1];
+	
+} */
 
 int	exec_cmd(t_data *data)
 {
@@ -63,48 +76,53 @@ int	exec_cmd(t_data *data)
 		{
 			if (cmd->index == 0)
 			{
+				close(redir[cmd->index][0]);
 				cmd->fd_in = data->fd_in;
 				cmd->fd_out = redir[cmd->index][1];
-				while (cmd->i < data->nb_cmd - 1)
+/* 				while (cmd->i < data->nb_cmd - 1)
 				{
 					close(redir[cmd->i][0]);
 					if (redir[cmd->i][1] != cmd->fd_out)
 						close(redir[cmd->i][1]);
 					cmd->i++;
-				}
+				} */
 				child_exec(data, cmd);
 			}
 			else if (cmd->index > 0 && cmd->index != data->nb_cmd - 1)
 			{
+				close(redir[cmd->index][0]);
 				cmd->fd_in = prev_output;
 				cmd->fd_out = redir[cmd->index][1];
-				while (cmd->i < data->nb_cmd - 1)
+/* 				while (cmd->i < data->nb_cmd - 1)
 				{
 					if (redir[cmd->i][0] != cmd->fd_in)
 						close(redir[cmd->i][0]);
 					if (redir[cmd->i][1] != cmd->fd_out)
 						close(redir[cmd->i][1]);
 					cmd->i++;
-				}
+				} */
 				child_exec(data, cmd);
 			}
 			else
 			{
-				cmd->fd_in = redir[cmd->index - 1][0];
+				close(redir[cmd->index][0]);
+				close(redir[cmd->index][1]);
+				cmd->fd_in = prev_output;
 				cmd->fd_out = data->fd_out;
-				while (cmd->i < data->nb_cmd - 1)
+/* 				while (cmd->i < data->nb_cmd - 1)
 				{
 					if (redir[cmd->i][0] != cmd->fd_in)
 						close(redir[cmd->i][0]);
 					close(redir[cmd->i][1]);
 					cmd->i++;
-				}
+				} */
 				child_exec(data, cmd);
 			}
 			return (0) ;
 		}
 		else
 		{
+
 			if (cmd->index != data->nb_cmd - 1)
 				prev_output = redir[cmd->index][0];
 			else
